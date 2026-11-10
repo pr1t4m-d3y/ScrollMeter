@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Scroll Meter</string>
+    <string name="accessibility_description">Scroll Meter counts how far you scroll in Facebook, Facebook Lite and Instagram and shows it as strokes and metres. It only sees which app is open and how far the screen moved. It never reads posts, names or messages, and it has no internet access.</string>
+</resources>
