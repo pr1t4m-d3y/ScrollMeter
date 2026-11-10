@@ -177,6 +177,102 @@ apksigner verify --print-certs app/build/outputs/apk/release/app-release.apk
 
 ---
 
+## Testing on the Android Studio emulator
+
+Use this section to try the app on a computer before a phone. The emulator can't reproduce
+Realme battery behaviour, so the phone checklist still matters.
+
+### E1. Create the emulator
+
+1. In Android Studio, open **Tools > Device Manager** (or **More Actions > Virtual Device Manager**).
+2. Click **Create Virtual Device**, choose **Pixel 6**, then **Next**.
+3. Pick the **Android 11 (API 30)** image first, because it is the minimum version the app supports. Click **Download**, then **Next**, then **Finish**.
+   - Apple Silicon Mac: choose the **arm64-v8a** image.
+   - Intel PC or Mac: choose **x86_64**.
+   - To install Facebook or Instagram later, choose an image marked **Google Play**.
+4. Press the play button to start it. The first start can take a few minutes.
+
+Hardware acceleration must be on: it is automatic on macOS, needs KVM on Linux, and needs
+Windows Hypervisor Platform on Windows.
+
+### E2. Build and run the app
+
+**From Android Studio:** open the `ScrollMeter` folder, wait for Gradle sync, choose the
+emulator in the device dropdown, then press **Run ▶**.
+
+**From a terminal** (with the emulator running):
+
+```bash
+cd ScrollMeter
+./gradlew installDebug                 # Windows: gradlew.bat installDebug
+adb devices                            # the emulator must be listed
+adb shell am start -n com.scrollmeter.app/.MainActivity
+```
+
+### E3. Turn on the permissions
+
+The fastest way is with `adb`:
+
+```bash
+# Accessibility service
+adb shell settings put secure enabled_accessibility_services com.scrollmeter.app/com.scrollmeter.app.service.ScrollAccessibilityService
+adb shell settings put secure accessibility_enabled 1
+
+# Display over other apps (HUD fallback)
+adb shell appops set com.scrollmeter.app SYSTEM_ALERT_WINDOW allow
+```
+
+On Android 13 and newer you may first need **Settings > Apps > Scroll Meter > ⋮ > Allow
+restricted settings**. Then reopen the app. The Setup screen should tick rows as you go.
+
+### E4. What to check
+
+| # | Action | Expected result |
+| --- | --- | --- |
+| 1 | Launch Scroll Meter | Setup opens with the count, for example "3 of 5 done" |
+| 2 | Turn on accessibility, return to the app | The accessibility row ticks |
+| 3 | Open Facebook, Instagram or Facebook Lite | Two green counters appear at the top: `0` on the left, `0m` on the right, within about 0.3 s |
+| 4 | Swipe down several times | The left counter rises, one stroke per swipe |
+| 5 | Swipe **up** | Nothing counts |
+| 6 | Go to the home screen | Both counters disappear |
+| 7 | Tap near the counters | Taps reach the app underneath |
+| 8 | Lock the screen while in the app | Counters disappear and the session ends |
+| 9 | Unlock with the app still open | Counters come back |
+| 10 | Rotate the emulator (**Ctrl+←** or the rotate button) | Counters move to the new top corners |
+| 11 | Open **Today** | Distance and session list show your test scrolling |
+| 12 | Open **Day** and **Weekly report** | Numbers match what you scrolled |
+| 13 | Settings > Floating counter: change size or colour | The counters restyle at once |
+
+To send a swipe from your computer to any watched app:
+
+```bash
+adb shell input swipe 500 1600 500 600 300
+```
+
+To see what the service receives, run this in a second terminal:
+
+```bash
+adb logcat -s ScrollMeter
+```
+
+Each scroll shows its numbers and whether it was counted. Use this when a count looks wrong.
+
+### E5. What the emulator cannot test
+
+- Battery optimisation and background killing (Realme-specific).
+- How the real Facebook and Instagram apps report scrolling; these can change without notice.
+- Auto-launch after a reboot.
+
+### E6. Quick checklist
+
+- [ ] Emulator runs the **API 30** image.
+- [ ] Setup opens and the accessibility row ticks.
+- [ ] A swipe in a watched app moves the counter.
+- [ ] The counter disappears when you leave the app.
+- [ ] `adb logcat -s ScrollMeter` shows scroll events.
+
+---
+
 ## Phone setup (Android 11 or newer)
 
 Do this once, on the phone.
