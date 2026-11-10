@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "0m" in the HUD's seven-segment style, inside the adaptive-icon safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 0 : segments a b c d e f -->
+    <path
+        android:fillColor="#2BEA2B"
+        android:pathData="M31,36h20v6h-20z M31,66h20v6h-20z M31,36h6v36h-6z M45,36h6v36h-6z" />
+    <!-- m : segments c e g (reads like "n") -->
+    <path
+        android:fillColor="#2BEA2B"
+        android:pathData="M57,51h20v6h-20z M57,51h6v21h-6z M71,51h6v21h-6z" />
+</vector>

@@ -1,0 +1,36 @@
+# ---- Build output (recreated by ./gradlew) ----
+.gradle/
+.kotlin/
+build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ---- Machine-specific ----
+# Path to the Android SDK on this computer
+local.properties
+# Android Studio / IntelliJ
+.idea/
+*.iml
+# macOS
+.DS_Store
+
+# ---- Never commit ----
+# APK signing keys. signing/debug.keystore is what lets a new build update the app that is
+# already on the phone: back it up somewhere safe, but keep it out of git.
+signing/
+*.jks
+*.keystore
+keystore.properties
+
+# Built APKs: they are published as GitHub release assets, not stored in the repository
+dist/
+*.apk
+*.aab
+
+# One-off helper that created the GitHub repository and the first release
+publish.sh
+
+# Claude Code local files
+.claude/

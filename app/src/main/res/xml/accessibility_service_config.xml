@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Only two event types are requested, and window content can never be read.
+
+    There is deliberately no android:packageNames filter. The PRD asked for one (FR2.1), but
+    the service must also see window changes from OTHER apps to know when the user leaves
+    Facebook / Instagram (FR1.1, E2). Android cannot filter packages per event type, so the
+    package filter is done in code: scroll events from any other package are dropped on the
+    first line of the handler and nothing about them is read or stored.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeViewScrolled"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/accessibility_description"
+    android:notificationTimeout="0"
+    android:settingsActivity="com.scrollmeter.app.MainActivity" />
